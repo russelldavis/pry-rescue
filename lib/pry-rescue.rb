@@ -54,7 +54,9 @@ class PryRescue
       bindings = without_duplicates(bindings)
 
       with_program_name "#$PROGRAM_NAME [in pry-rescue @ #{Dir.pwd}]" do
-        if defined?(PryStackExplorer)
+        if defined?(Byebug::PryPostMortemProcessor)
+          Byebug::PryPostMortemProcessor.start(exception.instance_variable_get(:@__bb_context))
+        elsif defined?(PryStackExplorer)
           pry :call_stack => bindings,
               :hooks => pry_hooks(exception),
               :initial_frame => initial_frame(bindings)

@@ -71,6 +71,9 @@ class << Pry
   #   end
   #
   def enable_rescuing!(block=nil)
+    Byebug.post_mortem = true
+    def Byebug.handle_post_mortem; end
+    Byebug.start
     Interception.listen(block) do |exception, binding|
       bindings = binding.respond_to?(:callers) ? binding.callers : [binding]
       unless exception.instance_variable_defined?(:@rescue_bindings)
